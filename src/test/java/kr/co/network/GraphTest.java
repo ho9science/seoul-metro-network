@@ -1,4 +1,4 @@
-package kr.co.subway;
+package kr.co.network;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +23,12 @@ public class GraphTest {
 		graph.addStation(station2);
 		graph.addStation(station3);
 		graph.addStation(station4);
-		graph.addEdge(station1, station2);
-		graph.addEdge(station2, station3);
-		graph.addEdge(station3, station4);
+		graph.addRoute(station1, station2);
+		graph.addRoute(station2, station3);
+		graph.addRoute(station3, station4);
 
 		List<Station> stations = Arrays.asList(station1, station3);
-		assertTrue(adjacentStation(graph.getAdjVertices(station2)).equals(adjacentStation(stations)));
+		assertTrue(adjacentStation(graph.getAdjStations(station2)).equals(adjacentStation(stations)));
 	}
 
 	private String adjacentStation(List<Station> stations){

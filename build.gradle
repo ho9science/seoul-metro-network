@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'kr.co.network'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -16,5 +16,6 @@ test {
 }
 
 dependencies {
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'
 }

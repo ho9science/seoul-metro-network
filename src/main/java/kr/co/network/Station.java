@@ -1,4 +1,4 @@
-package kr.co.subway;
+package kr.co.network;
 
 public class Station {
 
