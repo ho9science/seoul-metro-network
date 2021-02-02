@@ -2,13 +2,24 @@ package kr.co.network;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DataLoaderTest {
 	@Test
-	public void dataLoadTest(){
+	public void dataLoadTest() {
 		DataLoader dataLoader = new DataLoader();
-		Graph graph = dataLoader.load();
-		assertTrue(graph.size()==730);
+		Map<String, Station> map = dataLoader.load();
+		assertEquals(730, map.size());
+	}
+
+	@Test
+	public void test() {
+		DataLoader dataLoader = new DataLoader();
+		Graph graph = dataLoader.createGraph();
+		List<Station> stations = graph.getAdjStations(Station.builder().name("주안").nameEng("Juan").line("01호선").frCode("156").build());
+		assertEquals("주안국가산단,시민공원,간석,도화,주안,주안", stations.stream().map(Station::name).collect(Collectors.joining(",")));
 	}
 }

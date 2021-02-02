@@ -1,6 +1,6 @@
 package kr.co.network.constant;
 
-public enum Line {
+public enum Line implements EnumModel{
 	LINE1("01호선"),
 	LINE2("02호선"),
 	LINE3("03호선"),
@@ -25,8 +25,14 @@ public enum Line {
 	INCHEONSUBWAYLINE2("인천2호선"),
 	INCHEONSUBWAYLINE1("인천선");
 
-	final String name;
+	private final String name;
 
+	@Override
+	public String getKey() {
+		return name();
+	}
+
+	@Override
 	public String getName(){
 		return this.name;
 	}

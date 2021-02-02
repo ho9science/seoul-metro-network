@@ -49,6 +49,10 @@ public class Graph {
 		return adjStations.size();
 	}
 
+	Map<Station, List<Station>> all(){
+		return this.adjStations;
+	}
+
 	String printGraph() {
 		StringBuffer sb = new StringBuffer();
 		for(Station station : adjStations.keySet()) {
