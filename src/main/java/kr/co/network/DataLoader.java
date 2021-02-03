@@ -1,5 +1,6 @@
 package kr.co.network;
 
+import kr.co.network.constant.HomonymyStation;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -71,7 +72,7 @@ public class DataLoader {
 		for (Map.Entry<String, List<Map.Entry<String, Station>>> sortedNameInner : sortedNameMap.entrySet()) {
 			for (Map.Entry<String, Station> station2 : sortedNameInner.getValue()) {
 				if(sortedNameInner.getValue().size()>1){
-					if (station1 != null) {
+					if (station1 != null && !HomonymyStation.YANGPYEONG.getName().equals(station1.name())) {
 						graph.addRoute(station1, station2.getValue());
 						station1 = station2.getValue();
 					} else {
