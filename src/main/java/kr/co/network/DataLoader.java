@@ -47,6 +47,7 @@ public class DataLoader {
 	 * 그래프 생성
 	 * */
 	public Graph createGraph(){
+		Station prevStation = null;
 		Graph graph = new Graph();
 		DataLoader dataLoader = new DataLoader();
 		Map<String, Station> map = dataLoader.load();
@@ -60,14 +61,18 @@ public class DataLoader {
 			for (Map.Entry<String, Station> station2 : line.getValue()) {
 				if (station1 != null) {
 					graph.addEdge(station1, station2.getValue());
-					station1 = createComplexEdge(station2);
+					if(isBranchLine(station2)){
+						station1 = null;
+					}else{
+						station1 = station2.getValue();
+					}
 				} else {
 					station1 = station2.getValue();
 				}
 			}
 			station1 = null;
 		}
-		createCircularLine(graph, sortedLineMap.get(Line.LINE2.getName()));
+		createBranchAndCircularLine2(graph, sortedLineMap.get(Line.LINE2.getName()));
 		station1 = null;
 		Map<String, List<Map.Entry<String, Station>>> sortedNameMap = treeMap.entrySet().stream()
 			.collect(groupingBy(entry -> (String) entry.getValue().name()));
@@ -87,14 +92,22 @@ public class DataLoader {
 		return graph;
 	}
 
-	private Station createComplexEdge(Map.Entry<String, Station> station){
+	private boolean isBranchLine(Map.Entry<String, Station> station){
 		if(station.getKey().equals("234-4")){
-			return null;
+			return true;
 		}
-		return station.getValue();
+		if(station.getKey().equals("211-4")){
+			return true;
+		}
+		if(station.getKey().equals("P142")){
+			return true;
+		}
+		return false;
 	}
 
-	private void createCircularLine(Graph graph, List<Map.Entry<String, Station>> line){
+	private void createBranchAndCircularLine2(Graph graph, List<Map.Entry<String, Station>> line){
 		graph.addEdge(line.get(0).getValue(), line.get(50).getValue());
+		graph.addEdge(line.get(10).getValue(), line.get(15).getValue());
+		graph.addEdge(line.get(37).getValue(), line.get(42).getValue());
 	}
 }

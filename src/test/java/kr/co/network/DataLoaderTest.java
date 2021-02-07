@@ -38,7 +38,7 @@ public class DataLoaderTest {
 		DataLoader dataLoader = new DataLoader();
 		Graph graph = dataLoader.createGraph();
 		List<Edge> edges = graph.getAdjStations(Station.builder().name("신도림").build());
-		assertEquals("영등포,구로,대림,도림천,신도림,신도림",
+		assertEquals("영등포,구로,대림,도림천,문래,신도림,신도림",
 			edges.stream().map(Edge::getDestination).map(Station::name).collect(Collectors.joining(",")));
 	}
 
@@ -48,6 +48,15 @@ public class DataLoaderTest {
 		Graph graph = dataLoader.createGraph();
 		List<Edge> edges = graph.getAdjStations(Station.builder().name("까치산").build());
 		assertEquals("신정네거리,화곡,신정,까치산,까치산",
+			edges.stream().map(Edge::getDestination).map(Station::name).collect(Collectors.joining(",")));
+	}
+
+	@Test
+	public void mullaeTest() {
+		DataLoader dataLoader = new DataLoader();
+		Graph graph = dataLoader.createGraph();
+		List<Edge> edges = graph.getAdjStations(Station.builder().name("문래").build());
+		assertEquals("영등포구청,신도림",
 			edges.stream().map(Edge::getDestination).map(Station::name).collect(Collectors.joining(",")));
 	}
 
