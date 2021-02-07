@@ -1,17 +1,23 @@
 package kr.co.network;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class Station {
 
 	private final String name;
 	private final String nameEng;
 	private final String line;
 	private final String frCode;
+	private Set<Edge> edges;
 
 	private Station(Builder builder) {
 		this.name = builder.name;
 		this.nameEng = builder.nameEng;
 		this.line = builder.line;
 		this.frCode = builder.frCode;
+		this.edges = builder.edges;
 	}
 
 	public String name(){
@@ -30,6 +36,10 @@ public class Station {
 		return frCode;
 	}
 
+	public List<Edge> edges(){
+		return new ArrayList<>(edges);
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -39,6 +49,7 @@ public class Station {
 		private String nameEng;
 		private String line;
 		private String frCode;
+		private Set<Edge> edges;
 
 		public Builder(){
 
@@ -61,6 +72,11 @@ public class Station {
 
 		public Builder frCode(String frCode){
 			this.frCode = frCode;
+			return this;
+		}
+
+		public Builder edges(Set<Edge> edges){
+			this.edges = edges;
 			return this;
 		}
 

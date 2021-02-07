@@ -1,6 +1,7 @@
 package kr.co.network;
 
 import kr.co.network.constant.HomonymyStation;
+import kr.co.network.constant.Line;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -55,17 +56,18 @@ public class DataLoader {
 		Map<String, List<Map.Entry<String, Station>>> sortedLineMap = treeMap.entrySet().stream()
 			.collect(groupingBy(entry -> (String) entry.getValue().line()));
 		Station station1 = null;
-		for (Map.Entry<String, List<Map.Entry<String, Station>>> key : sortedLineMap.entrySet()) {
-			for (Map.Entry<String, Station> station2 : key.getValue()) {
+		for (Map.Entry<String, List<Map.Entry<String, Station>>> line : sortedLineMap.entrySet()) {
+			for (Map.Entry<String, Station> station2 : line.getValue()) {
 				if (station1 != null) {
-					graph.addRoute(station1, station2.getValue());
-					station1 = station2.getValue();
+					graph.addEdge(station1, station2.getValue());
+					station1 = createComplexEdge(station2);
 				} else {
 					station1 = station2.getValue();
 				}
 			}
 			station1 = null;
 		}
+		createCircularLine(graph, sortedLineMap.get(Line.LINE2.getName()));
 		station1 = null;
 		Map<String, List<Map.Entry<String, Station>>> sortedNameMap = treeMap.entrySet().stream()
 			.collect(groupingBy(entry -> (String) entry.getValue().name()));
@@ -73,7 +75,7 @@ public class DataLoader {
 			for (Map.Entry<String, Station> station2 : sortedNameInner.getValue()) {
 				if(sortedNameInner.getValue().size()>1){
 					if (station1 != null && !HomonymyStation.YANGPYEONG.getName().equals(station1.name())) {
-						graph.addRoute(station1, station2.getValue());
+						graph.addEdge(station1, station2.getValue());
 						station1 = station2.getValue();
 					} else {
 						station1 = station2.getValue();
@@ -83,5 +85,16 @@ public class DataLoader {
 			station1 = null;
 		}
 		return graph;
+	}
+
+	private Station createComplexEdge(Map.Entry<String, Station> station){
+		if(station.getKey().equals("234-4")){
+			return null;
+		}
+		return station.getValue();
+	}
+
+	private void createCircularLine(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdge(line.get(0).getValue(), line.get(50).getValue());
 	}
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GraphTest {
 
@@ -23,16 +22,16 @@ public class GraphTest {
 		graph.addStation(station2);
 		graph.addStation(station3);
 		graph.addStation(station4);
-		graph.addRoute(station1, station2);
-		graph.addRoute(station2, station3);
-		graph.addRoute(station3, station4);
+		graph.addEdge(station1, station2);
+		graph.addEdge(station2, station3);
+		graph.addEdge(station3, station4);
 
-		List<Station> stations = Arrays.asList(station1, station3);
-		assertTrue(adjacentStation(graph.getAdjStations(station2)).equals(adjacentStation(stations)));
+		List<Edge> edges = Arrays.asList(new Edge(station2, station1), new Edge(station2, station3));
+		assertEquals(adjacentStation(edges), adjacentStation(graph.getAdjStations(station2)));
 	}
 
-	private String adjacentStation(List<Station> stations){
-		return stations.stream().map(Station::name).collect(Collectors.joining());
+	private String adjacentStation(List<Edge> edges){
+		return edges.stream().map(Edge::getDestination).map(Station::name).collect(Collectors.joining());
 	}
 
 	@Test
