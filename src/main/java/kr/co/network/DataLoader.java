@@ -11,10 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -47,7 +44,6 @@ public class DataLoader {
 	 * 그래프 생성
 	 * */
 	public Graph createGraph(){
-		Station prevStation = null;
 		Graph graph = new Graph();
 		DataLoader dataLoader = new DataLoader();
 		Map<String, Station> map = dataLoader.load();
@@ -73,13 +69,18 @@ public class DataLoader {
 			station1 = null;
 		}
 		createBranchAndCircularLine2(graph, sortedLineMap.get(Line.LINE2.getName()));
+		createBranchLine5(graph, sortedLineMap.get(Line.LINE5.getName()));
+		createBranchLineGyeongChun(graph, sortedLineMap.get(Line.GYEONGCHUN.getName()));
+		createBranchLineGyeongUi(graph, sortedLineMap.get(Line.GYEONGUI.getName()));
+		createBranchLine1(graph, sortedLineMap.get(Line.LINE1.getName()));
+		createBranchLine6(graph, sortedLineMap.get(Line.LINE6.getName()));
 		station1 = null;
 		Map<String, List<Map.Entry<String, Station>>> sortedNameMap = treeMap.entrySet().stream()
 			.collect(groupingBy(entry -> (String) entry.getValue().name()));
 		for (Map.Entry<String, List<Map.Entry<String, Station>>> sortedNameInner : sortedNameMap.entrySet()) {
 			for (Map.Entry<String, Station> station2 : sortedNameInner.getValue()) {
 				if(sortedNameInner.getValue().size()>1){
-					if (station1 != null && !HomonymyStation.YANGPYEONG.getName().equals(station1.name())) {
+					if (station1 != null && isHomonymyStationName(station1.name())) {
 						graph.addEdge(station1, station2.getValue());
 						station1 = station2.getValue();
 					} else {
@@ -92,6 +93,12 @@ public class DataLoader {
 		return graph;
 	}
 
+	private boolean isHomonymyStationName(String name){
+		if(HomonymyStation.YANGPYEONG.getName().equals(name)){
+			return false;
+		}else return !HomonymyStation.SINCHON.getName().equals(name);
+	}
+
 	private boolean isBranchLine(Map.Entry<String, Station> station){
 		if(station.getKey().equals("234-4")){
 			return true;
@@ -102,6 +109,54 @@ public class DataLoader {
 		if(station.getKey().equals("P142")){
 			return true;
 		}
+		if(station.getKey().equals("556")){
+			return true;
+		}
+		if(station.getKey().equals("P116")){
+			return true;
+		}
+		if(station.getKey().equals("K138")){
+			return true;
+		}
+		if(station.getKey().equals("K336")){
+			return true;
+		}
+		if(station.getKey().equals("K826")){
+			return true;
+		}
+		if(station.getKey().equals("P312")){
+			return true;
+		}
+		if(station.getKey().equals("P313")){
+			return true;
+		}
+		if(station.getKey().equals("161")){
+			return true;
+		}
+		if(station.getKey().equals("P144-1")){
+			return true;
+		}
+		if(station.getKey().equals("P157-1")){
+			return true;
+		}
+		if(station.getKey().equals("610")){
+			return true;
+		}
+		if(station.getKey().equals("611")){
+			return true;
+		}
+		if(station.getKey().equals("612")){
+			return true;
+		}
+		if(station.getKey().equals("613")){
+			return true;
+		}
+		if(station.getKey().equals("614")){
+			return true;
+		}
+		if(station.getKey().equals("615")){
+			return true;
+		}
 		return false;
 	}
 
@@ -109,5 +164,35 @@ public class DataLoader {
 		graph.addEdge(line.get(0).getValue(), line.get(50).getValue());
 		graph.addEdge(line.get(10).getValue(), line.get(15).getValue());
 		graph.addEdge(line.get(37).getValue(), line.get(42).getValue());
+	}
+
+	private void createBranchLine5(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdge(line.get(38).getValue(), line.get(46).getValue());
+	}
+
+	private void createBranchLineGyeongChun(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdge(line.get(0).getValue(), line.get(4).getValue());
+	}
+
+	private void createBranchLineGyeongUi(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdge(line.get(29).getValue(), line.get(53).getValue());
+		graph.addEdge(line.get(53).getValue(), line.get(54).getValue());
+		graph.addEdge(line.get(32).getValue(), line.get(54).getValue());
+		graph.addEdge(line.get(54).getValue(), line.get(55).getValue());
+	}
+
+	private void createBranchLine1(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdge(line.get(41).getValue(), line.get(62).getValue());
+		graph.addEdge(line.get(64).getValue(), line.get(66).getValue());
+		graph.addEdge(line.get(78).getValue(), line.get(80).getValue());
+	}
+
+	private void createBranchLine6(Graph graph, List<Map.Entry<String, Station>> line){
+		graph.addEdgeOneDirection(line.get(0).getValue(), line.get(1).getValue());
+		graph.addEdgeOneDirection(line.get(1).getValue(), line.get(2).getValue());
+		graph.addEdgeOneDirection(line.get(2).getValue(), line.get(3).getValue());
+		graph.addEdgeOneDirection(line.get(3).getValue(), line.get(4).getValue());
+		graph.addEdgeOneDirection(line.get(4).getValue(), line.get(5).getValue());
+		graph.addEdgeOneDirection(line.get(5).getValue(), line.get(0).getValue());
 	}
 }

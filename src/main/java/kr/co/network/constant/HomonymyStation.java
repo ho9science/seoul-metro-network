@@ -1,7 +1,8 @@
 package kr.co.network.constant;
 
 public enum HomonymyStation implements EnumModel{
-	YANGPYEONG("양평");
+	YANGPYEONG("양평"),
+	SINCHON("신촌");
 
 	private final String name;
 
