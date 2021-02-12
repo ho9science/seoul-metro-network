@@ -112,6 +112,6 @@ public class Station {
 
 	@Override
 	public String toString() {
-		return name;
+		return name+"("+nameEng+")-"+line+" - "+frCode+"";
 	}
 }

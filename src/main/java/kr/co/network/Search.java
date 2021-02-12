@@ -11,4 +11,17 @@ public class Search {
 		Graph graph = dataLoader.createGraph();
 		graph.dfsUtil(station, visited);
 	}
+
+	public void bfs(Station station){
+		DataLoader dataLoader = new DataLoader();
+		Graph graph = dataLoader.createGraph();
+		graph.bfsUtil(station, visited);
+	}
+
+	public void dijkstra(Station source, Station target){
+		DataLoader dataLoader = new DataLoader();
+		Graph graph = dataLoader.createGraph();
+		graph.dijkstraUtil(graph, source, target, visited);
+	}
+
 }

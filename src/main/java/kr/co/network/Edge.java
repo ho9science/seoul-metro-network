@@ -25,4 +25,8 @@ public class Edge {
 	public Station getDestination(){
 		return this.destination;
 	}
+
+	public int getTime() {
+		return this.time;
+	}
 }
