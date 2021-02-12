@@ -18,10 +18,4 @@ public class Search {
 		graph.bfsUtil(station, visited);
 	}
 
-	public void dijkstra(Station source, Station target){
-		DataLoader dataLoader = new DataLoader();
-		Graph graph = dataLoader.createGraph();
-		graph.dijkstraUtil(graph, source, target, visited);
-	}
-
 }

@@ -30,6 +30,11 @@ public class Graph {
 		adjStations.get(destination).add(new Edge(destination, departure));
 	}
 
+	void addEdge(Station departure, Station destination, int time){
+		adjStations.get(departure).add(new Edge(departure, destination, time));
+		adjStations.get(destination).add(new Edge(destination, departure, time));
+	}
+
 	void addEdgeOneDirection(Station departure, Station destination){
 		adjStations.get(departure).add(new Edge(departure, destination));
 	}
@@ -108,38 +113,6 @@ public class Graph {
 				if (visited.get(nextStation) == null) {
 					visited.put(nextStation, true);
 					queue.add(nextStation);
-				}
-			}
-		}
-	}
-
-	protected void dijkstraUtil(Graph graph, Station source, Station target, Map<Station, Boolean> visited){
-		int minLength = Integer.MAX_VALUE;
-		LinkedList<Station> queue = new LinkedList<>();
-		Queue<Station> shortestDistance = new PriorityQueue<>();
-		Station station = graph.getStation(source);
-		System.out.println(station);
-		queue.add(station);
-		visited.put(station, true);
-
-		while (!queue.isEmpty())
-		{
-			// Dequeue a vertex from queue and print it
-			source = queue.poll();
-			System.out.print(source + "("+source.line()+")| ->");
-
-			// Get all adjacent vertices of the dequeued vertex s
-			// If a adjacent has not been visited, then mark it
-			// visited and enqueue it
-			Iterator<Edge> edges = adjStations.get(source).listIterator();
-			while (edges.hasNext())
-			{
-				Edge ed = edges.next();
-				Station nextStation = ed.getDestination();
-				if (ed.getTime() < minLength) {
-//					visited.put(nextStation, true);
-					queue.add(nextStation);
-					minLength += ed.getTime();
 				}
 			}
 		}

@@ -81,7 +81,7 @@ public class DataLoader {
 			for (Map.Entry<String, Station> station2 : sortedNameInner.getValue()) {
 				if(sortedNameInner.getValue().size()>1){
 					if (station1 != null && isHomonymyStationName(station1.name())) {
-						graph.addEdge(station1, station2.getValue());
+						graph.addEdge(station1, station2.getValue(), 5);
 						station1 = station2.getValue();
 					} else {
 						station1 = station2.getValue();

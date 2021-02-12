@@ -90,6 +90,7 @@ public class Station {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = result + ((line == null) ? 0 : line.hashCode());
 		return result;
 	}
 

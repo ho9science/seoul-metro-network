@@ -5,8 +5,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Dijkstra {
-	private Set<Station> settledNodes;
-	private Set<Station> unSettledNodes;
+	private Set<Station> settledStations;
+	private Set<Station> unSettledStations;
 	private Map<Station, Station> predecessors;
 	private Map<Station, Integer> distance;
 	private Map<Station, List<Edge>> neighbor;
@@ -16,23 +16,23 @@ public class Dijkstra {
 	}
 
 	public void execute(Station source) {
-		settledNodes = new HashSet<>();
-		unSettledNodes = new HashSet<>();
+		settledStations = new HashSet<>();
+		unSettledStations = new HashSet<>();
 		distance = new HashMap<>();
 		predecessors = new HashMap<>();
 		distance.put(source, 0);
-		unSettledNodes.add(source);
-		while (unSettledNodes.size() > 0) {
-			Station node = getMinimum(unSettledNodes);
-			settledNodes.add(node);
-			unSettledNodes.remove(node);
-			findMinimalDistances(node);
+		unSettledStations.add(source);
+		while (!unSettledStations.isEmpty()) {
+			Station station = getMinimum(unSettledStations);
+			settledStations.add(station);
+			unSettledStations.remove(station);
+			findMinimalDistances(station);
 		}
 	}
 
 	private void findMinimalDistances(Station station) {
 		List<Edge> adjacentEdge = neighbor.get(station);
-		for (Station target : adjacentEdge.stream().map(Edge::getDeparture)
+		for (Station target : adjacentEdge.stream().map(Edge::getDestination)
 			.filter(s -> !isSettled(s))
 			.collect(Collectors.toList())) {
 			if (getShortestDistance(target) > getShortestDistance(station)
@@ -40,7 +40,7 @@ public class Dijkstra {
 				distance.put(target, getShortestDistance(station)
 					+ getDistance(station, target));
 				predecessors.put(target, station);
-				unSettledNodes.add(target);
+				unSettledStations.add(target);
 			}
 		}
 	}
@@ -54,22 +54,22 @@ public class Dijkstra {
 		throw new RuntimeException("Should not happen");
 	}
 
-	private Station getMinimum(Set<Station> vertexes) {
+	private Station getMinimum(Set<Station> stations) {
 		Station minimum = null;
-		for (Station vertex : vertexes) {
+		for (Station station : stations) {
 			if (minimum == null) {
-				minimum = vertex;
+				minimum = station;
 			} else {
-				if (getShortestDistance(vertex) < getShortestDistance(minimum)) {
-					minimum = vertex;
+				if (getShortestDistance(station) < getShortestDistance(minimum)) {
+					minimum = station;
 				}
 			}
 		}
 		return minimum;
 	}
 
-	private boolean isSettled(Station vertex) {
-		return settledNodes.contains(vertex);
+	private boolean isSettled(Station station) {
+		return settledStations.contains(station);
 	}
 
 	private int getShortestDistance(Station destination) {
@@ -81,14 +81,9 @@ public class Dijkstra {
 		}
 	}
 
-	/*
-	 * This method returns the path from the source to the selected target and
-	 * NULL if no path exists
-	 */
-	public LinkedList<Station> getPath(Station target) {
-		LinkedList<Station> path = new LinkedList<Station>();
-		Station step = target;
-		// check if a path exists
+	public List<Station> getPath(Station destination) {
+		List<Station> path = new LinkedList<>();
+		Station step = destination;
 		if (predecessors.get(step) == null) {
 			return null;
 		}
@@ -97,7 +92,6 @@ public class Dijkstra {
 			step = predecessors.get(step);
 			path.add(step);
 		}
-		// Put it into the correct order
 		Collections.reverse(path);
 		return path;
 	}

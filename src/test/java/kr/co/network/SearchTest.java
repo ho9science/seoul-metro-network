@@ -8,4 +8,11 @@ public class SearchTest {
 		Search search = new Search();
 		search.dfs(Station.builder().name("당고개").line("04호선").build());
 	}
+
+	@Test
+	public void bfsTest(){
+		Search search = new Search();
+		search.bfs(Station.builder().name("당고개").line("04호선").build());
+	}
+	
 }
