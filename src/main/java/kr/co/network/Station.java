@@ -51,10 +51,6 @@ public class Station {
 		private String frCode;
 		private Set<Edge> edges;
 
-		public Builder(){
-
-		}
-
 		public Builder name(String name){
 			this.name = name;
 			return this;
@@ -104,11 +100,12 @@ public class Station {
 			return false;
 		Station other = (Station) obj;
 		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
+			return other.name == null;
+		} else if (!name.equals(other.name)) {
 			return false;
-		return true;
+		} else {
+			return true;
+		}
 	}
 
 	@Override

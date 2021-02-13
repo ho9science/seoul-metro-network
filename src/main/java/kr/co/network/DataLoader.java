@@ -16,7 +16,7 @@ import java.util.*;
 import static java.util.stream.Collectors.groupingBy;
 
 public class DataLoader {
-	public Map<String, Station> load() {
+	protected Map<String, Station> load() {
 		try {
 			Map<String, Station> map = new HashMap<>();
 			Path path = Paths.get("src/main/resources/data/서울특별시 노선별 지하철역 정보(신규).csv");
@@ -45,18 +45,27 @@ public class DataLoader {
 	 * */
 	public Graph createGraph(){
 		Graph graph = new Graph();
-		DataLoader dataLoader = new DataLoader();
-		Map<String, Station> map = dataLoader.load();
-		map.entrySet().stream().forEach(entry -> graph.addStation(entry.getValue()));
+		Map<String, Station> map = load();
+		map.forEach((key, value) -> graph.addStation(value));
 
 		TreeMap<String, Station> treeMap = new TreeMap<>(map);
 		Map<String, List<Map.Entry<String, Station>>> sortedLineMap = treeMap.entrySet().stream()
-			.collect(groupingBy(entry -> (String) entry.getValue().line()));
+			.collect(groupingBy(entry -> entry.getValue().line()));
 		Station station1 = null;
 		for (Map.Entry<String, List<Map.Entry<String, Station>>> line : sortedLineMap.entrySet()) {
 			for (Map.Entry<String, Station> station2 : line.getValue()) {
 				if (station1 != null) {
-					graph.addEdge(station1, station2.getValue());
+					if (station2.getValue().line().equals(Line.AREX.getName()) ||
+						station2.getValue().line().equals(Line.GYEONGGANG.getName())) {
+						graph.addEdge(station1, station2.getValue(), 4);
+					}else if(station2.getValue().line().equals(Line.GYEONGUI.getName()) ||
+						station2.getValue().line().equals(Line.GYEONGCHUN.getName()) ||
+					    station2.getValue().line().equals(Line.SHINBUNDANG.getName()) ||
+						station2.getValue().line().equals(Line.EVERLINE.getName())){
+						graph.addEdge(station1, station2.getValue(), 3);
+					}else{
+						graph.addEdge(station1, station2.getValue());
+					}
 					if(isBranchLine(station2)){
 						station1 = null;
 					}else{

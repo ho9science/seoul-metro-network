@@ -21,7 +21,11 @@ public class Graph {
 	}
 
 	void removeStation(Station station) {
-		adjStations.values().stream().forEach(e -> e.remove(station));
+		adjStations.values().forEach(edges -> edges.forEach(edge -> {
+			if(edge.getDeparture().equals(station)){
+				edges.remove(edge);
+			}
+		}));
 		adjStations.remove(station);
 	}
 
@@ -43,9 +47,9 @@ public class Graph {
 		List<Edge> eV1 = adjStations.get(station1);
 		List<Edge> eV2 = adjStations.get(station2);
 		if (eV1 != null)
-			eV1.remove(station2);
+			eV1.remove(new Edge(station1, station2));
 		if (eV2 != null)
-			eV2.remove(station1);
+			eV2.remove(new Edge(station2, station1));
 	}
 
 	List<Edge> getAdjStations(Station station) {
@@ -71,50 +75,5 @@ public class Graph {
 			sb.append(" ");
 		}
 		return sb.toString();
-	}
-
-	protected void dfsUtil(Station station, Map<Station, Boolean> visited) {
-		// 현재 노드를 방문한 것으로 표시하고 값을 출력
-		visited.put(station, true);
-
-		System.out.print(station + "("+station.line()+")| ->");
-
-		// 방문한 노드와 인접한 모든 노드를 가져온다.
-		ListIterator<Edge> s = adjStations.get(station).listIterator();
-		while (s.hasNext()) {
-			Station nextStation = s.next().getDestination();
-			// 방문하지 않은 노드면 해당 노드를 시작 노드로 다시 DFSUtil 호출
-			if (visited.get(nextStation)==null)
-				dfsUtil(nextStation, visited); // 순환 호출
-		}
-	}
-
-	protected void bfsUtil(Station station, Map<Station, Boolean> visited){
-		// Create a queue for BFS
-		LinkedList<Station> queue = new LinkedList<>();
-
-		// Mark the current node as visited and enqueue it
-		visited.put(station, true);
-		queue.add(station);
-
-		while (!queue.isEmpty())
-		{
-			// Dequeue a vertex from queue and print it
-			station = queue.poll();
-			System.out.print(station + "("+station.line()+")| ->");
-
-			// Get all adjacent vertices of the dequeued vertex s
-			// If a adjacent has not been visited, then mark it
-			// visited and enqueue it
-			Iterator<Edge> edges = adjStations.get(station).listIterator();
-			while (edges.hasNext())
-			{
-				Station nextStation = edges.next().getDestination();
-				if (visited.get(nextStation) == null) {
-					visited.put(nextStation, true);
-					queue.add(nextStation);
-				}
-			}
-		}
 	}
 }
