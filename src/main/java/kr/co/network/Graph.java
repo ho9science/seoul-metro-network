@@ -16,6 +16,7 @@ public class Graph {
 			.map(Edge::getDeparture).findFirst()
 			.orElse(Station.builder().build());
 	}
+
 	void addStation(Station station) {
 		adjStations.putIfAbsent(station, new ArrayList<>());
 	}

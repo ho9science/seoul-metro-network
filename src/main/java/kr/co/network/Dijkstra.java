@@ -10,12 +10,13 @@ public class Dijkstra {
 	private Map<Station, Station> predecessors;
 	private Map<Station, Integer> distance;
 	private Map<Station, List<Edge>> neighbor;
+	private Map<Station, Map<Station, Station>> prePath;
 
 	public Dijkstra(Graph graph) {
 		this.neighbor = graph.all();
 	}
 
-	public void execute(Station source) {
+	public void start(Station source) {
 		settledStations = new HashSet<>();
 		unSettledStations = new HashSet<>();
 		distance = new HashMap<>();
@@ -28,6 +29,30 @@ public class Dijkstra {
 			unSettledStations.remove(station);
 			findMinimalDistances(station);
 		}
+	}
+
+	public void start(){
+		init();
+		prePath = new HashMap<>();
+		for(Map.Entry<Station, List<Edge>> stations : neighbor.entrySet()){
+			distance.put(stations.getKey(), 0);
+			unSettledStations.add(stations.getKey());
+			while (!unSettledStations.isEmpty()) {
+				Station station = getMinimum(unSettledStations);
+				settledStations.add(station);
+				unSettledStations.remove(station);
+				findMinimalDistances(station);
+			}
+			prePath.put(stations.getKey(), predecessors);
+			init();
+		}
+	}
+
+	public void init(){
+		settledStations = new HashSet<>();
+		unSettledStations = new HashSet<>();
+		distance = new HashMap<>();
+		predecessors = new HashMap<>();
 	}
 
 	private void findMinimalDistances(Station station) {
@@ -93,6 +118,31 @@ public class Dijkstra {
 			path.add(step);
 		}
 		Collections.reverse(path);
+		return path;
+	}
+
+	public List<Station> getPath(Station destination, Map<Station, Station> predecessors) {
+		List<Station> path = new LinkedList<>();
+		Station step = destination;
+		if (predecessors.get(step) == null) {
+			return null;
+		}
+		path.add(step);
+		while (predecessors.get(step) != null) {
+			step = predecessors.get(step);
+			path.add(step);
+		}
+		Collections.reverse(path);
+		return path;
+	}
+
+	public Map<Station, Map<Station, Station>> getPathAll() {
+		Map<Station, Map<Station, Station>> path = new HashMap<>();
+		for(Station station : neighbor.keySet()){
+			start(station);
+			path.put(station, predecessors);
+			init();
+		}
 		return path;
 	}
 }
